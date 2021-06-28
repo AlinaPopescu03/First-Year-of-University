@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+//calculam maximul dintre 2 elemente
+int maxim(int a, int b)
+{
+    return a>b ? a:b;
+}
+
+
+
+int main()
+{
+    //declarare si deschidere fisiere de lucru
+
+    FILE *in=fopen("comoara.in", "r");
+    FILE *out=fopen("comoara.out", "w");
+    //n linii si m coloane
+    int n, m;
+    fscanf(in, "%d %d", &n, &m);
+
+    // declaram matricea in care citim valorile
+    int **mat ;
+
+    int i, j;
+    //alocare memorie
+    mat=malloc(n*sizeof(int));
+    for (i=0; i<n; i++)
+        mat[i]=malloc(m*sizeof(int));
+
+
+    //citire valori comori in fiecare sector
+    for (i=0; i<n; i++)
+        for(j=0; j<m; j++)
+            fscanf(in, "%d", &mat[i][j]);
+
+    /*for (i=0; i<n; i++)
+    {
+        for(j=0; j<m; j++)
+            fprintf(out, "%d ", mat[i][j]);
+        fprintf(out, "\n");
+    }*/
+
+    //calculam sumele in matricea in care am citit numerele
+    ///la pornim de la linia 2 care are indexul 1 pentru ca prima linie nu se modifica
+    for (i=1; i<n; i++)
+        for(j=0; j<m; j++)
+        {
+            if (j==0)
+                mat[i][j]+=maxim(mat[i-1][j], mat[i-1][j+1]);
+            if (j==m-1)
+                mat[i][j]+=maxim(mat[i-1][j], mat[i-1][j-1]);
+            if (j !=0 && j!=m-1)
+            {
+                int maxim1;
+                maxim1=maxim(mat[i-1][j], mat[i-1][j-1]);
+                mat[i][j]+=maxim(maxim1, mat[i-1][j+1]);
+
+            }
+
+
+
+        }
+
+    int suma_max=mat[n-1][0]; //initializare suma maxima
+    // gasim suma maxima
+    for(j=1; j<m; j++)
+        if (suma_max<mat[n-1][j])
+            suma_max=mat[n-1][j];
+
+   /* for (i=0; i<n; i++)
+    {
+        for(j=0; j<m; j++)
+            fprintf(out, "%d ", mat[i][j]);
+        fprintf(out, "\n");
+    }*/
+
+    //afisare suma maxima
+    fprintf(out, "%d", suma_max);
+
+    //eliberare memorie matrice
+    for (i=0; i<n; i++)
+        free(mat[i]);
+    free(mat);
+
+
+    fclose(in);
+    fclose(out);
+
+
+
+
+
+
+}
+
+
+///Complexitate citirii datelor O(n*m)
+/// Complexiatea calcularii sumelor este aproximativ O(n*m)
+///Initializare Suma maxima cu primul element de pe ultima linie O(1)
+///Complexiatea calcularii celei mai mari sume posibile este O(m-1)
+///Complexitate afisare solutie O(1)
+
+///Complexiatte totala 2*O(n*m)+O(m-1)+ 2*O(1)----> O(n*m)
