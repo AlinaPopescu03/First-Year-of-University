@@ -1,0 +1,3 @@
+Persons
+PersonID LastName FirstName Address City merge 
+int varchar varchar varchar varchar varchar 

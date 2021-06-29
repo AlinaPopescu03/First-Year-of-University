@@ -1,0 +1,6 @@
+
+INSERT INTO Haida (PersonID, LastName, FirstName, Address, City, merge)
+VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'mare',);
+
+
+QUIT
